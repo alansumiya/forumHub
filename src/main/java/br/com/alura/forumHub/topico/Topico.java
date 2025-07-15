@@ -1,6 +1,7 @@
 package br.com.alura.forumHub.topico;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,5 +35,17 @@ public class Topico {
         this.curso = dados.curso();
         this.dataCriacao = LocalDateTime.now();
         this.status = "Ativo";
+    }
+
+    public void atualizarInformacoes(@Valid DadosAtualizarTopico dados){
+        if (dados.titulo() != null){
+            this.titulo = dados.titulo();
+        }
+        if(dados.mensagem() != null){
+            this.mensagem = dados.mensagem();
+        }
+        if(dados.curso() != null){
+            this.curso = dados.curso();
+        }
     }
 }

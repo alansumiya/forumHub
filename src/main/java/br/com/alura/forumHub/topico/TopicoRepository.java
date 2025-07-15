@@ -13,4 +13,8 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
     WHERE t.curso = :nomeCurso AND YEAR(t.dataCriacao) = :ano
     """)
     Page<Topico> buscarPorCursoEAno(@Param("nomeCurso") String nomeCurso, @Param("ano") int ano, Pageable paginacao);
+
+
+    boolean existsByTituloAndMensagem(String titulo, String mensagem);
+
 }
