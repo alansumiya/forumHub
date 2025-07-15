@@ -79,4 +79,15 @@ public class TopicoController {
         return ResponseEntity.ok(new DadosDetalhamentoTopico(topico));
     }
 
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity excluir(@PathVariable Long id){
+        var topico = repository.findById(id);
+
+        if (topico.isEmpty()){
+            throw new EntityNotFoundException("Tópico com ID "+ id + " não encontrado.");
+        }
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
