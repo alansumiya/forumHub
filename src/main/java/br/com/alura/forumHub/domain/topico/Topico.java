@@ -1,4 +1,4 @@
-package br.com.alura.forumHub.topico;
+package br.com.alura.forumHub.domain.topico;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;

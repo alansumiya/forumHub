@@ -1,7 +1,7 @@
 package br.com.alura.forumHub.controller;
 
+import br.com.alura.forumHub.domain.topico.*;
 import br.com.alura.forumHub.infra.exception.ValidacaoException;
-import br.com.alura.forumHub.topico.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
