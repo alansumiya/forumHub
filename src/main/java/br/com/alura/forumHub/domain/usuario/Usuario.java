@@ -1,6 +1,8 @@
 package br.com.alura.forumHub.domain.usuario;
 
+import br.com.alura.forumHub.domain.topico.Topico;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +26,30 @@ public class Usuario implements UserDetails {
     private Long id;
     private String login;
     private String senha;
+    private String email;
+    private String perfis;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Topico> topicos = new ArrayList<>();
+
+    public Usuario(DadosCadastroUsuario dados, String senhaHash) {
+        this.login = dados.login();
+        this.senha = senhaHash;
+        this.email = dados.email();
+        this.perfis = dados.perfis();
+    }
+
+    public void atualizarInformacoes(@Valid DadosAtualizarUsuario dados, String senhaHash){
+        if (dados.senha() != null){
+            this.senha = senhaHash;
+        }
+        if (dados.email() != null){
+            this.email = dados.email();
+        }
+        if (dados.perfis() != null){
+            this.perfis = dados.perfis();
+        }
+    }
 
 
     @Override

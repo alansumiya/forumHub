@@ -1,6 +1,8 @@
 package br.com.alura.forumHub.controller;
 
 import br.com.alura.forumHub.domain.topico.*;
+import br.com.alura.forumHub.domain.usuario.Usuario;
+import br.com.alura.forumHub.domain.usuario.UsuarioRepository;
 import br.com.alura.forumHub.infra.exception.ValidacaoException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -20,14 +23,23 @@ public class TopicoController {
     @Autowired
     private TopicoRepository repository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dados, UriComponentsBuilder uriBuilder){
+
         if(repository.existsByTituloAndMensagem(dados.titulo(), dados.mensagem())){
             throw new ValidacaoException("Já existe um tópico com o mesmo título e mensagem.");
         }
+        //pega o usuário logado
+        String loginUsuarioLogado = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        var topico = new Topico(dados);
+        Usuario usuario = usuarioRepository.findByLogin(loginUsuarioLogado)
+                .orElseThrow(()->new ValidacaoException("Usuário logado não encontrado no banco."));
+
+        var topico = new Topico(dados, usuario);
         repository.save(topico);
         var uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosDetalhamentoTopico(topico));

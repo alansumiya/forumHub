@@ -1,5 +1,6 @@
 package br.com.alura.forumHub.domain.topico;
 
+import br.com.alura.forumHub.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,18 +24,23 @@ public class Topico {
     private String mensagem;
     private LocalDateTime dataCriacao;
     private String status;
-    private String autor;
     private String curso;
     private int respostas;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-    public Topico(DadosCadastroTopico dados) {
+
+
+
+    public Topico(DadosCadastroTopico dados, Usuario usuario) {
         this.titulo = dados.titulo();
         this.mensagem = dados.mensagem();
-        this.autor = dados.autor();
         this.curso = dados.curso();
         this.dataCriacao = LocalDateTime.now();
         this.status = "Ativo";
+        this.usuario = usuario;
     }
 
     public void atualizarInformacoes(@Valid DadosAtualizarTopico dados){
