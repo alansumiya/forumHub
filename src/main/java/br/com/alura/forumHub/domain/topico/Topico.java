@@ -1,5 +1,6 @@
 package br.com.alura.forumHub.domain.topico;
 
+import br.com.alura.forumHub.domain.resposta.Resposta;
 import br.com.alura.forumHub.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Topico")
 @Table(name = "topico", uniqueConstraints = @UniqueConstraint(columnNames = {"titulo", "mensagem"}))
@@ -25,11 +28,13 @@ public class Topico {
     private LocalDateTime dataCriacao;
     private String status;
     private String curso;
-    private int respostas;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resposta> respostas = new ArrayList<>();
 
 
 
@@ -54,4 +59,12 @@ public class Topico {
             this.curso = dados.curso();
         }
     }
+
+    //contagem dinâmica das respostas, não ficando armazenado fisicamente no banco de
+    //dados, somente aparece a quantidade de respostas se você fazer a busca detalhada do
+    //tópico
+    public int getRespostas(){
+        return respostas.size();
+    }
+
 }
