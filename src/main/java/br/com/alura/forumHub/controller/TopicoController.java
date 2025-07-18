@@ -4,6 +4,7 @@ import br.com.alura.forumHub.domain.topico.*;
 import br.com.alura.forumHub.domain.usuario.Usuario;
 import br.com.alura.forumHub.domain.usuario.UsuarioRepository;
 import br.com.alura.forumHub.infra.exception.ValidacaoException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
     @Autowired
     private TopicoRepository repository;

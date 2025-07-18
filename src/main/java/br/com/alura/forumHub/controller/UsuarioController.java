@@ -2,6 +2,7 @@ package br.com.alura.forumHub.controller;
 
 import br.com.alura.forumHub.domain.usuario.*;
 import br.com.alura.forumHub.infra.exception.ValidacaoException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/usuarios")
+@SecurityRequirement(name = "bearer-key")
 public class UsuarioController {
     @Autowired
     private UsuarioRepository repository;

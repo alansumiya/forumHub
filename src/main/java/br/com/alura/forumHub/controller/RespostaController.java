@@ -5,6 +5,7 @@ import br.com.alura.forumHub.domain.topico.DadosAtualizarTopico;
 import br.com.alura.forumHub.domain.topico.TopicoRepository;
 import br.com.alura.forumHub.domain.usuario.Usuario;
 import br.com.alura.forumHub.domain.usuario.UsuarioRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/respostas")
+@SecurityRequirement(name = "bearer-key")
 public class RespostaController {
 
     @Autowired
